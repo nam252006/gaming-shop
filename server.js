@@ -12,7 +12,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "change-this-password";
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(__dirname));
 
 function loadDB() {
   try { return JSON.parse(fs.readFileSync(DB_FILE, "utf8")); }
@@ -152,5 +152,5 @@ app.delete("/api/admin/products/:id", auth, admin, (req,res)=>{
   const db=loadDB(); db.products=db.products.filter(x=>x.id!==Number(req.params.id)); saveDB(db); res.json({ok:true});
 });
 
-app.use((req,res)=>res.sendFile(path.join(__dirname,"public","index.html")));
+app.use((req, res) => {   res.sendFile(path.join(__dirname, "index.html")); });
 app.listen(PORT, "0.0.0.0", ()=>console.log(`${SHOP_NAME} running at http://localhost:${PORT}`));
